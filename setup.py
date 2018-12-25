@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(name='rlagent',
       version='0.1',
@@ -7,7 +7,7 @@ setup(name='rlagent',
       author='Yunjae Choi',
       author_email='yunjae.choi1000@gmail.com',
       license='MIT',
-      packages=['rlagent'],
+      packages=find_packages(),
       zip_safe=False,
       install_requires=[
           'numpy>=1.14.0', 'tensorflow>=1.10.1', 'gym>=0.10.3', 'pybullet>=1.9.7',
