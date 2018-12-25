@@ -11,7 +11,7 @@ setup(name='rlagent',
       zip_safe=False,
       install_requires=[
           'numpy>=1.14.0', 'tensorflow>=1.10.1', 'gym>=0.10.3', 'pybullet>=1.9.7',
-      ]
+      ],
       classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
