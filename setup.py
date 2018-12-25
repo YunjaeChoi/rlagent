@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='rlagent',
-      version='0.1.1',
+      version='0.1.3',
       description='rlagent: Reinforcement learning framework in tensorflow, compatible with OpenAI Gym like environments.',
       url='https://github.com/YunjaeChoi/rlagent',
       author='Yunjae Choi',
