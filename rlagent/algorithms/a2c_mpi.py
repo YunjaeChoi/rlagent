@@ -60,7 +60,7 @@ class A2C(tf.keras.Model):
             action, value = outputs
             return {'action':action, 'value':value, 'action_dist':self.local_model.action_dist}
 
-    def get_loss(self, inputs, outputs):
+    def set_losses(self, inputs, outputs):
         value_loss = tf.losses.mean_squared_error(inputs['target_value'], outputs['value'],
                                                   reduction=tf.losses.Reduction.SUM)
 
@@ -75,15 +75,24 @@ class A2C(tf.keras.Model):
             policy_log_prob = -outputs['action_dist'].log_prob(inputs['action'])
             policy_loss = policy_log_prob * tf.stop_gradient(advantage) - self.beta * tf.reduce_sum(action_entropy)
 
-        total_loss = value_loss + tf.reduce_sum(policy_loss)
-        return total_loss
+        self.total_loss = value_loss + tf.reduce_sum(policy_loss)
+        self.add_loss([self.total_loss])
+        self.losses_dict = {'total_loss':self.total_loss}
 
-    def get_train_ops(self, loss, global_step):
+    def get_train_ops(self, global_step):
+        #adding regularization
+        total_loss = self.total_loss
+        for l in self.local_model.losses:
+            total_loss += l
+
         local_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=self.local_model.name)
-        local_grads_and_vars = self.optimizer.compute_gradients(loss, var_list=local_vars)
+        local_grads_and_vars = self.optimizer.compute_gradients(total_loss, var_list=local_vars)
         local_grads = [local_grad for local_grad, local_var in local_grads_and_vars]
         clipped_local_grads, _ = tf.clip_by_global_norm(local_grads, self.clip_grad_by_norm_ratio)
         clipped_local_grads_and_vars = [[clipped_local_grads[i], local_vars[i]] for i in range(len(clipped_local_grads))]
         local_update_op = self.optimizer.apply_gradients(clipped_local_grads_and_vars, global_step=global_step)
         train_ops = [local_update_op]
+
+        #adding other ops (batchnorm, etc.)
+        train_ops += self.local_model.updates
         return train_ops

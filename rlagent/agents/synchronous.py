@@ -44,23 +44,16 @@ class NStepMPIAgent(rlagent.Agent):
         self.outputs = self.agent.convert_output_list_to_dict(outputs)
 
         #set loss, train ops
-        self.loss = self.agent.get_loss(self.inputs, self.outputs)
-
-        #global_step
+        self.agent.set_losses(self.inputs, self.outputs)
+        self.losses = self.agent.losses_dict
         self.global_step = tf.train.get_or_create_global_step()
-
-        self.train_ops = self.agent.get_train_ops(self.loss, self.global_step)
+        self.train_ops = self.agent.get_train_ops(self.global_step)
 
         self.train_summary_op = self.set_summary_ops_per_train()
 
         self.saver = tf.train.Saver()
         self.local_model_saver = tf.train.Saver(tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES,
                                                                   scope=self.agent.local_model.name))
-
-
-    def set_summary_ops_per_train(self):
-        train_summary_op = tf.summary.scalar('total_loss', self.loss, family='losses')
-        return train_summary_op
 
     def reset_episode_vars(self):
         if self.done == True and self.rank == 0:

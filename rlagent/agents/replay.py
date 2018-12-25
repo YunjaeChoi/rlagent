@@ -43,13 +43,6 @@ class ExperienceReplayAgent(rlagent.Agent):
         #saver
         self.saver = tf.train.Saver()
 
-    def set_summary_ops_per_train(self):
-        loss_summary = []
-        for name, loss in self.losses.items():
-            loss_summary.append(tf.summary.scalar(name, loss, family='losses'))
-        train_summary_op = tf.summary.merge(loss_summary)
-        return train_summary_op
-
     def one_step_update(self):
         action = self.sess.run(self.outputs['actor_action'],
                                feed_dict={self.state_input:self.state})

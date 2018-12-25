@@ -32,7 +32,11 @@ class Agent(object):
         """
         summary per train
         """
-        pass
+        loss_summary = []
+        for name, loss in self.losses.items():
+            loss_summary.append(tf.summary.scalar(name, loss, family='losses'))
+        train_summary_op = tf.summary.merge(loss_summary)
+        return train_summary_op
 
     def set_summary_ops_per_episode(self):
         """
