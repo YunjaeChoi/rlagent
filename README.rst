@@ -9,6 +9,14 @@ Algorithms
 
 Installation
 ============
+1. install MPICH
+
+.. code:: shell
+
+    sudo apt-get install mpich
+
+2. install rlagent
+
 .. code:: shell
 
     pip install rlagent

@@ -10,7 +10,7 @@ setup(name='rlagent',
       packages=find_packages(),
       zip_safe=False,
       install_requires=[
-          'numpy>=1.14.0', 'tensorflow>=1.10.1', 'gym>=0.10.3', 'pybullet>=1.9.7',
+          'numpy>=1.14.0', 'tensorflow>=1.10.1', 'gym>=0.10.3', 'pybullet>=1.9.7', 'mpi4py>=3.0.0',
       ],
       classifiers=[
         "Programming Language :: Python :: 3",
