@@ -15,7 +15,22 @@ Installation
 
     sudo apt-get install mpich
 
-2. install rlagent
+2. install tensorflow
+
+cpu-version
+
+.. code:: shell
+
+    pip install tensorflow
+
+gpu-version
+
+.. code:: shell
+
+    pip install tensorflow-gpu
+
+
+3. install rlagent
 
 .. code:: shell
 
